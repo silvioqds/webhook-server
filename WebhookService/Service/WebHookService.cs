@@ -9,14 +9,23 @@ namespace WebhookService.Service
         private readonly List<Subscription> _subscriptions = new(); //Inscritos na mémoria, o legal seria criar um portal para cadastrar seus topicos e callbacks
         private readonly HttpClient _httpClient = new();
 
-        //Metodo que serve para adicionar seus "inscritos" no seu webhook
+        /// <summary>
+        /// Metodo que serve para adicionar seus "inscritos" no seu webhook
+        /// </summary>
+        /// <param name="subscription"></param>
         public void Subscribe(Subscription subscription)
         {
             if(_subscriptions.Contains(subscription)) return; //Não deixo adicionar o mesmo topico para o mesmo callback duas vezes
             _subscriptions.Add(subscription);
         }
 
-        //Metodo que devolve a solicitacao a partir do topico informado pelo cliente webhook 
+        /// <summary>
+        /// Metodo que devolve a solicitacao a partir do topico informado pelo cliente webhook 
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundTopicException"></exception>
         public async Task PublishMessage(string topic, object message)
         {           
             var subscribeWebHooks = _subscriptions.Where(x => x.Topic == topic).ToList();
